@@ -8,16 +8,18 @@ const bodyBackgroundColor = document.querySelector('body');
 let timer = null;
 
 start.addEventListener('click', () => {
-  if (timer == null) {
-    bodyBackgroundColor.style.backgroundColor = `${getRandomHexColor()}`;
-    timer = setInterval(() => {
-      let randomColor = getRandomHexColor();
-      bodyBackgroundColor.style.backgroundColor = `${randomColor}`;
-    }, 1000);
-  } else return;
+  start.setAttribute('disabled', '');
+  stop.removeAttribute('disabled', '');
+  bodyBackgroundColor.style.backgroundColor = `${getRandomHexColor()}`;
+  timer = setInterval(() => {
+    let randomColor = getRandomHexColor();
+    bodyBackgroundColor.style.backgroundColor = `${randomColor}`;
+  }, 1000);
 });
 
 stop.addEventListener('click', () => {
+  stop.setAttribute('disabled', '');
   clearInterval(timer);
   timer = null;
+  start.removeAttribute('disabled', '');
 });

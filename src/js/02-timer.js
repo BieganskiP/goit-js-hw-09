@@ -1,7 +1,7 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-const datePicker = document.getElementById('datetime-picker');
 const startBtn = document.querySelector('[data-start]');
 const timerDays = document.querySelector('[data-days]');
 const timerHours = document.querySelector('[data-hours]');
@@ -29,22 +29,40 @@ const options = {
 };
 flatpickr('#datetime-picker', options);
 
-startBtn.addEventListener('click', () => {
-  setInterval(() => {
-    if (selectedDate.getTime() > todaysDate.getTime()) {
-      todaysDate = new Date();
-      let timeDiff = selectedDate.getTime() - todaysDate.getTime();
-      let timeDiffSeconds = Math.floor(timeDiff / 1000);
-      let timeDiffMinutes = Math.floor(timeDiffSeconds / 60);
-      let timeDiffHours = Math.floor(timeDiffMinutes / 60);
-      let timeDiffDays = Math.floor(timeDiffHours / 24);
+const addLeadingZero = value => {
+  return value.padStart(2, '0');
+};
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  todaysDate = new Date();
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-      timerDays.innerHTML = timeDiffDays;
-      timerHours.innerHTML = timeDiffHours;
-      timerMinutes.innerHTML = timeDiffMinutes;
-      timerSeconds.innerHTML = timeDiffSeconds;
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = Math.floor((ms % day) / hour);
+  // Remaining minutes
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  // Remaining seconds
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+  timerDays.innerHTML = days;
+  timerHours.innerHTML = addLeadingZero(String(hours));
+  timerMinutes.innerHTML = addLeadingZero(String(minutes));
+  timerSeconds.innerHTML = addLeadingZero(String(seconds));
+}
+startBtn.addEventListener('click', () => {
+  startBtn.setAttribute('disabled', '');
+  const timer = setInterval(() => {
+    let timeDiff = selectedDate.getTime() - todaysDate.getTime();
+    if (timeDiff > 0) {
+      convertMs(timeDiff);
     } else {
-      clearInterval();
+      clearInterval(timer);
+      Notify.info('Timer has hit 0!');
     }
   }, 1000);
 });
