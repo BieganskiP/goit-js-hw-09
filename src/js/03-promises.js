@@ -24,8 +24,8 @@ createBtn.addEventListener('click', e => {
     for (let i = 0; i < amountInput.value; i++) {
       setTimeout(() => {
         createPromise(i + 1, currentDelay), parseInt(stepInput.value);
+        currentDelay += parseInt(stepInput.value);
       }, parseInt(stepInput.value) * i);
-      currentDelay += parseInt(stepInput.value);
     }
   }, parseInt(delayInput.value));
 });

@@ -7,6 +7,7 @@ const stop = document.querySelector('[data-stop]');
 const bodyBackgroundColor = document.querySelector('body');
 let timer = null;
 
+stop.setAttribute('disabled', '');
 start.addEventListener('click', () => {
   start.setAttribute('disabled', '');
   stop.removeAttribute('disabled', '');
