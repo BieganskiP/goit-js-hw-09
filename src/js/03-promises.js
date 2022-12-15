@@ -17,7 +17,7 @@ function createPromise(position, delay) {
   }
 }
 
-createBtn.addEventListener('submit', e => {
+createBtn.addEventListener('click', e => {
   e.preventDefault();
   let currentDelay = parseInt(delayInput.value);
   setTimeout(() => {
